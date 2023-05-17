@@ -10,10 +10,17 @@ import org.wso2.carbon.identity.xds.common.constant.XDSConstants;
 import org.wso2.carbon.identity.xds.server.mgt.event.handlers.ApplicationEventHandler;
 import org.wso2.carbon.identity.xds.server.mgt.event.handlers.CORSEventHandler;
 import org.wso2.carbon.identity.xds.server.mgt.event.handlers.ClaimEventHandler;
+import org.wso2.carbon.identity.xds.server.mgt.event.handlers.EmailTemplateEventHandler;
+import org.wso2.carbon.identity.xds.server.mgt.event.handlers.EventPublisherEventHandler;
 import org.wso2.carbon.identity.xds.server.mgt.event.handlers.IDPEventHandler;
+import org.wso2.carbon.identity.xds.server.mgt.event.handlers.KeyStoreEventHandler;
+import org.wso2.carbon.identity.xds.server.mgt.event.handlers.NotificationSenderXDSEventHandler;
 import org.wso2.carbon.identity.xds.server.mgt.event.handlers.OauthEventHandler;
-import org.wso2.carbon.identity.xds.server.mgt.event.handlers.RoleEventHandler;
+import org.wso2.carbon.identity.xds.server.mgt.event.handlers.RemoteFetchEventHandler;
 import org.wso2.carbon.identity.xds.server.mgt.event.handlers.SAMLEventHandler;
+import org.wso2.carbon.identity.xds.server.mgt.event.handlers.TemplateXDSEventHandler;
+import org.wso2.carbon.identity.xds.server.mgt.event.handlers.UserStoreXDSEventHandler;
+import org.wso2.carbon.identity.xds.server.mgt.event.handlers.WorkflowEventHandler;
 
 
 /**
@@ -28,12 +35,11 @@ public class XDSServiceServer extends ReceiveEventServiceGrpc.ReceiveEventServic
                                      responseObserver) {
 
         boolean isError = false;
+        LOG.info(String.format("Received event of type: %s, Operation: %s",
+                request.getType(), request.getOperation()));
         try {
             startTenantFlow(request.getTenantDomain(), request.getUsername());
             switch (XDSConstants.EventType.valueOf(request.getType())) {
-                case ROLE:
-                    new RoleEventHandler().handleEvent(request);
-                    break;
                 case CLAIM:
                     new ClaimEventHandler().handleEvent(request);
                     break;
@@ -51,6 +57,30 @@ public class XDSServiceServer extends ReceiveEventServiceGrpc.ReceiveEventServic
                     break;
                 case IDP:
                     new IDPEventHandler().handleEvent(request);
+                    break;
+                case EVENT_PUBLISHER:
+                    new EventPublisherEventHandler().handleEvent(request);
+                    break;
+                case WORKFLOW:
+                    new WorkflowEventHandler().handleEvent(request);
+                    break;
+                case KEYSTORE:
+                    new KeyStoreEventHandler().handleEvent(request);
+                    break;
+                case REMOTE_FETCH:
+                    new RemoteFetchEventHandler().handleEvent(request);
+                    break;
+                case EMAIL_TEMPLATE:
+                    new EmailTemplateEventHandler().handleEvent(request);
+                    break;
+                case NOTIFICATION_SENDER:
+                    new NotificationSenderXDSEventHandler().handleEvent(request);
+                    break;
+                case TEMPLATE:
+                    new TemplateXDSEventHandler().handleEvent(request);
+                    break;
+                case USER_STORE:
+                    new UserStoreXDSEventHandler().handleEvent(request);
                     break;
                 default:
                     LOG.info("Unknown event type received: " + request.getType());

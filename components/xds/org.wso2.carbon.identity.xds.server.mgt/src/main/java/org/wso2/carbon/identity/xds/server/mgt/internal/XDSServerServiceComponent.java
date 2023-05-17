@@ -11,15 +11,21 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.wso2.carbon.email.mgt.EmailTemplateManager;
+import org.wso2.carbon.event.publisher.core.EventPublisherService;
 import org.wso2.carbon.identity.application.mgt.ApplicationManagementService;
 import org.wso2.carbon.identity.claim.metadata.mgt.ClaimMetadataManagementService;
 import org.wso2.carbon.identity.core.util.IdentityUtil;
 import org.wso2.carbon.identity.cors.mgt.core.CORSManagementService;
+import org.wso2.carbon.identity.notification.sender.tenant.config.NotificationSenderManagementService;
 import org.wso2.carbon.identity.oauth.OAuthAdminServiceImpl;
-import org.wso2.carbon.identity.role.mgt.core.RoleManagementService;
+import org.wso2.carbon.identity.remotefetch.common.RemoteFetchConfigurationService;
 import org.wso2.carbon.identity.sso.saml.SAMLSSOConfigServiceImpl;
+import org.wso2.carbon.identity.template.mgt.TemplateManager;
+import org.wso2.carbon.identity.user.store.configuration.UserStoreConfigService;
 import org.wso2.carbon.identity.xds.server.mgt.XDSServiceServer;
 import org.wso2.carbon.idp.mgt.IdpManager;
+import org.wso2.carbon.security.keystore.KeyStoreManagementService;
 
 import java.io.IOException;
 
@@ -81,28 +87,6 @@ public class XDSServerServiceComponent {
 
         LOG.debug("Unsetting Claim Metadata management Service");
         XDSServerDataHolder.setClaimMetadataManagementService(null);
-    }
-
-    @Reference(
-            name = "role.management.service",
-            service = org.wso2.carbon.identity.role.mgt.core.RoleManagementService.class,
-            cardinality = ReferenceCardinality.MANDATORY,
-            policy = ReferencePolicy.DYNAMIC,
-            unbind = "unsetRoleManagementService"
-    )
-    protected void setRoleManagementService(
-            RoleManagementService roleManagementService) {
-
-        LOG.debug("Receiving Role management Service");
-        XDSServerDataHolder.setRoleManagementService(roleManagementService);
-
-    }
-
-    protected void unsetRoleManagementService(
-            RoleManagementService roleManagementService) {
-
-        LOG.debug("Unsetting Role management Service");
-        XDSServerDataHolder.setRoleManagementService(null);
     }
 
     @Reference(
@@ -212,5 +196,156 @@ public class XDSServerServiceComponent {
 
         LOG.debug("Unsetting Identity Provider Manager.");
         XDSServerDataHolder.setIdentityProviderManager(null);
+    }
+
+    @Reference(
+            name = "template.manager",
+            service = org.wso2.carbon.identity.template.mgt.TemplateManager.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetTemplateManager"
+    )
+    protected void setTemplateManager(
+            TemplateManager templateManager) {
+
+        LOG.debug("Receiving Template Manager.");
+        XDSServerDataHolder.setTemplateManager(templateManager);
+
+    }
+
+    protected void unsetTemplateManager(
+            TemplateManager templateManager) {
+
+        LOG.debug("Unsetting Template Manager.");
+        XDSServerDataHolder.setTemplateManager(null);
+    }
+
+    @Reference(
+            name = "event.publisher.service",
+            service = org.wso2.carbon.event.publisher.core.EventPublisherService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetEventPublisherService"
+    )
+    protected void setEventPublisherService(
+            EventPublisherService eventPublisherService) {
+
+        LOG.debug("Receiving Event Publisher Service.");
+        XDSServerDataHolder.setEventPublisherService(eventPublisherService);
+
+    }
+
+    protected void unsetEventPublisherService(
+            EventPublisherService eventPublisherService) {
+
+        LOG.debug("Unsetting Event Publisher Service.");
+        XDSServerDataHolder.setEventPublisherService(null);
+    }
+
+    @Reference(
+            name = "keystore.management.service",
+            service = org.wso2.carbon.security.keystore.KeyStoreManagementService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetKeyStoreManagementService"
+    )
+    protected void setKeyStoreManagementService(
+            KeyStoreManagementService keyStoreManagementService) {
+
+        LOG.debug("Receiving Keystore Management Service.");
+        XDSServerDataHolder.setKeyStoreManagementService(keyStoreManagementService);
+    }
+
+    protected void unsetKeyStoreManagementService(
+            KeyStoreManagementService keyStoreManagementService) {
+
+        LOG.debug("Unsetting Keystore Management Service.");
+        XDSServerDataHolder.setKeyStoreManagementService(null);
+    }
+
+    @Reference(
+            name = "remote.fetch.configuration.service",
+            service = org.wso2.carbon.identity.remotefetch.common.RemoteFetchConfigurationService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetRemoteFetchConfigurationService"
+    )
+    protected void setRemoteFetchConfigurationService(
+            RemoteFetchConfigurationService remoteFetchConfigurationService) {
+
+        LOG.debug("Receiving Remote Fetch Configuration Service.");
+        XDSServerDataHolder.setRemoteFetchConfigurationService(remoteFetchConfigurationService);
+    }
+
+    protected void unsetRemoteFetchConfigurationService(
+            RemoteFetchConfigurationService remoteFetchConfigurationService) {
+
+        LOG.debug("Unsetting Remote Fetch Configuration Service.");
+        XDSServerDataHolder.setRemoteFetchConfigurationService(null);
+    }
+
+    @Reference(
+            name = "email.template.manager",
+            service = org.wso2.carbon.email.mgt.EmailTemplateManager.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetEmailTemplateManager"
+    )
+    protected void setEmailTemplateManager(
+            EmailTemplateManager emailTemplateManager) {
+
+        LOG.debug("Receiving Email Template Manager.");
+        XDSServerDataHolder.setEmailTemplateManager(emailTemplateManager);
+    }
+
+    protected void unsetEmailTemplateManager(
+            EmailTemplateManager emailTemplateManager) {
+
+        LOG.debug("Unsetting Email Template Manager.");
+        XDSServerDataHolder.setEmailTemplateManager(null);
+    }
+
+    @Reference(
+            name = "notification.sender.management.service",
+            service = org.wso2.carbon.identity.notification.sender.tenant.config
+                    .NotificationSenderManagementService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetNotificationSenderManagementService"
+    )
+    protected void setNotificationSenderManagementService(
+            NotificationSenderManagementService notificationSenderManagementService) {
+
+        LOG.debug("Receiving Notification Sender Management Service");
+        XDSServerDataHolder.setNotificationSenderManagementService(notificationSenderManagementService);
+    }
+
+    protected void unsetNotificationSenderManagementService(
+            NotificationSenderManagementService notificationSenderManagementService) {
+
+        LOG.debug("Unsetting Notification Sender Management Service");
+        XDSServerDataHolder.setEmailTemplateManager(null);
+    }
+
+    @Reference(
+            name = "user.store.config.service",
+            service = org.wso2.carbon.identity.user.store.configuration.UserStoreConfigService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetUserStoreConfigService"
+    )
+    protected void setUserStoreConfigService(
+            UserStoreConfigService userStoreConfigService) {
+
+        LOG.debug("Receiving User Store Config Service");
+        XDSServerDataHolder.setUserStoreConfigService(userStoreConfigService);
+
+    }
+
+    protected void unsetUserStoreConfigService(
+            UserStoreConfigService userStoreConfigService) {
+
+        LOG.debug("Unsetting User Store Config Service");
+        XDSServerDataHolder.setTemplateManager(null);
     }
 }
